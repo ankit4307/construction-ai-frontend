@@ -1,3 +1,5 @@
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import {
   forwardRef,
   useEffect,
@@ -119,7 +121,7 @@ const Chat = forwardRef(function Chat({ token }, ref) {
             )}
             {e.status === 'done' && (
               <div className="bubble-a">
-                {e.answer}
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{e.answer}</ReactMarkdown>
                 {e.sheetsUsed && e.sheetsUsed.length > 0 && (
                   <div className="sheets-used">
                     {e.sheetsUsed.map((s) => (
