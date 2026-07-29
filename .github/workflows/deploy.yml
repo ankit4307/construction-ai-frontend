@@ -35,4 +35,3 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-psycopg2-binary==2.9.9
