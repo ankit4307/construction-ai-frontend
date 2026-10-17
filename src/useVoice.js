@@ -41,7 +41,7 @@ export function cleanForSpeech(md) {
     const intro = stripMarks(nonTable);
     return (
       (intro ? intro + ". " : "") +
-      `${dataRows} entries ki table screen par dikha di hai, kripya dekh lijiye.`
+      `A table with ${dataRows} ${dataRows === 1 ? "entry" : "entries"} is shown on screen.`
     );
   }
 
@@ -101,9 +101,9 @@ export function useVoice(lang = "hi-IN") {
     r.onerror = (e) => {
       setListening(false);
       if (e.error === "not-allowed" || e.error === "service-not-allowed") {
-        setError("Mic permission block hai. Address bar ke lock icon se allow karein.");
+        setError("Microphone access is blocked. Allow it from the lock icon in the address bar, then reload.");
       } else if (e.error === "no-speech") {
-        setError("Kuch sunai nahi diya. Dobara try karein.");
+        setError("No speech was detected. Please try again.");
       } else {
         setError("Voice input error: " + e.error);
       }

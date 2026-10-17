@@ -1,0 +1,270 @@
+/* ---------------------------------------------------------------------------
+   Smoother look for the Site chat, layered on top of styles.css.
+   Cosmetic only: colours, rounded corners, soft shadows and short animations.
+   No layout rules, so it cannot move or break anything.
+
+   To go back to the old look, delete the line
+       import './theme-polish.css';
+   from App.jsx.
+--------------------------------------------------------------------------- */
+
+:root {
+  --pol-border: rgba(255, 255, 255, 0.08);
+  --pol-border-strong: rgba(255, 255, 255, 0.16);
+  --pol-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --pol-shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --pol-gold: #ffb400;
+  --pol-gold-soft: rgba(255, 180, 0, 0.14);
+  --pol-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+::selection {
+  background: rgba(255, 180, 0, 0.3);
+}
+
+/* Slim, rounded scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+
+/* ---- Primary pill button (Speak, Try again) ---- */
+.pol-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  color: #1a1200;
+  background: linear-gradient(180deg, #ffc233, #e09a00);
+  box-shadow: 0 6px 16px rgba(224, 154, 0, 0.3);
+  transition: transform 0.15s var(--pol-ease), box-shadow 0.15s var(--pol-ease),
+    filter 0.15s var(--pol-ease);
+}
+.pol-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow: 0 10px 22px rgba(224, 154, 0, 0.42);
+}
+.pol-btn:active { transform: scale(0.97); }
+.pol-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+.pol-btn.is-listening {
+  color: #fff;
+  background: linear-gradient(180deg, #d9534a, #b83228);
+  box-shadow: 0 6px 16px rgba(184, 50, 40, 0.4);
+  animation: pol-pulse 1.5s ease-in-out infinite;
+}
+@keyframes pol-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(217, 83, 74, 0.55); }
+  50% { box-shadow: 0 0 0 9px rgba(217, 83, 74, 0); }
+}
+
+/* ---- Language dropdown ---- */
+.pol-select {
+  padding: 7px 12px;
+  border: 1px solid var(--pol-border-strong);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.18s var(--pol-ease), background 0.18s var(--pol-ease);
+}
+.pol-select:hover { border-color: var(--pol-gold); background: rgba(255, 255, 255, 0.07); }
+.pol-select:focus-visible { outline: none; border-color: var(--pol-gold); box-shadow: 0 0 0 3px var(--pol-gold-soft); }
+.pol-select option { background: #1a1c20; color: #eee; }
+
+/* ---- Voice status strip ---- */
+.pol-status {
+  margin: 10px 14px 0;
+  padding: 9px 16px;
+  border: 1px solid var(--pol-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 13px;
+  opacity: 0.9;
+}
+.pol-status.is-error {
+  color: #ff7a6e;
+  border-color: rgba(255, 122, 110, 0.35);
+  background: rgba(255, 122, 110, 0.08);
+  opacity: 1;
+}
+
+/* ---- Connecting card ---- */
+.pol-card {
+  padding: 36px 40px;
+  border: 1px solid var(--pol-border);
+  border-radius: 22px;
+  background: rgba(26, 28, 32, 0.85);
+  box-shadow: var(--pol-shadow);
+}
+
+/* ---- Top bar and sidebar ---- */
+.app-shell .topbar {
+  background: rgba(20, 22, 26, 0.88);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--pol-border);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.28);
+}
+
+.app-shell .sidebar {
+  background: linear-gradient(180deg, #1c1e23 0%, #16181c 100%);
+  border-right: 1px solid var(--pol-border);
+  box-shadow: 8px 0 30px rgba(0, 0, 0, 0.28);
+}
+.app-shell .sidebar-top { border-bottom: 1px solid var(--pol-border); }
+.app-shell .sidebar button {
+  border-radius: 10px;
+  transition: background 0.18s var(--pol-ease), border-color 0.18s var(--pol-ease),
+    transform 0.18s var(--pol-ease);
+}
+.app-shell .sidebar button:hover { background: rgba(255, 255, 255, 0.06); }
+
+.app-shell .title-block {
+  border-color: var(--pol-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.025);
+}
+.app-shell .title-block-row,
+.app-shell .title-block-cell { border-color: var(--pol-border); }
+
+/* ---- Chat ---- */
+.chat-wrap .log-scroll { scroll-behavior: smooth; }
+
+.chat-wrap .examples button {
+  border: 1px solid var(--pol-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: transform 0.18s var(--pol-ease), border-color 0.18s var(--pol-ease),
+    background 0.18s var(--pol-ease), box-shadow 0.18s var(--pol-ease);
+}
+.chat-wrap .examples button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 180, 0, 0.55);
+  background: rgba(255, 180, 0, 0.07);
+  box-shadow: var(--pol-shadow-sm);
+}
+
+.chat-wrap .entry { animation: pol-rise 0.35s var(--pol-ease) both; }
+@keyframes pol-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.chat-wrap .tag { border-radius: 6px; }
+
+.chat-wrap .bubble-q {
+  background: #23252a;
+  border: 1px solid var(--pol-border);
+  border-radius: 16px 16px 4px 16px;
+  box-shadow: var(--pol-shadow-sm);
+}
+.chat-wrap .bubble-a {
+  background: #1a1c20;
+  border-top: 1px solid var(--pol-border);
+  border-right: 1px solid var(--pol-border);
+  border-bottom: 1px solid var(--pol-border);
+  border-radius: 14px;
+  box-shadow: var(--pol-shadow-sm);
+}
+
+.chat-wrap .chip {
+  border-radius: 999px;
+  border-color: var(--pol-border-strong);
+}
+
+/* Tables inside answers */
+.chat-wrap .table-scroll {
+  border: 1px solid var(--pol-border);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.18);
+}
+.chat-wrap .table-scroll table { margin: 0; }
+.chat-wrap .table-scroll thead th { background: rgba(255, 255, 255, 0.06); }
+.chat-wrap .table-scroll tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.025); }
+.chat-wrap .table-scroll tbody tr { transition: background 0.15s var(--pol-ease); }
+.chat-wrap .table-scroll tbody tr:hover td { background: rgba(255, 180, 0, 0.07); }
+.chat-wrap .table-scroll tr:last-child td { border-bottom: none; }
+
+/* Listen / Stop under an answer */
+.chat-wrap .listen-btn {
+  margin-top: 10px;
+  padding: 5px 13px;
+  border: 1px solid var(--pol-border-strong);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  opacity: 0.85;
+  cursor: pointer;
+  transition: border-color 0.18s var(--pol-ease), background 0.18s var(--pol-ease),
+    opacity 0.18s var(--pol-ease);
+}
+.chat-wrap .listen-btn:hover {
+  opacity: 1;
+  border-color: var(--pol-gold);
+  background: var(--pol-gold-soft);
+}
+
+/* Composer */
+.chat-wrap .composer input[type='text'] {
+  border: 1px solid var(--pol-border-strong);
+  border-radius: 14px;
+  background: #1a1c20;
+  transition: border-color 0.18s var(--pol-ease), box-shadow 0.18s var(--pol-ease);
+}
+.chat-wrap .composer input[type='text']:focus {
+  outline: none;
+  border-color: var(--pol-gold);
+  box-shadow: 0 0 0 4px var(--pol-gold-soft);
+}
+.chat-wrap .composer .send-btn {
+  border: none;
+  border-radius: 12px;
+  color: #1a1200;
+  font-weight: 600;
+  background: linear-gradient(180deg, #ffc233, #e09a00);
+  box-shadow: 0 6px 16px rgba(224, 154, 0, 0.32);
+  transition: transform 0.15s var(--pol-ease), box-shadow 0.15s var(--pol-ease),
+    filter 0.15s var(--pol-ease);
+}
+.chat-wrap .composer .send-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow: 0 10px 22px rgba(224, 154, 0, 0.45);
+}
+.chat-wrap .composer .send-btn:active:not(:disabled) { transform: scale(0.97); }
+.chat-wrap .composer .send-btn:disabled {
+  color: rgba(255, 255, 255, 0.4);
+  background: #3a3220;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.chat-wrap input[type='checkbox'] { accent-color: var(--pol-gold); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

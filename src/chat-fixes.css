@@ -1,0 +1,60 @@
+/* Keeps long answers and wide tables inside the reply box. */
+
+.chat-wrap .entry {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.chat-wrap .bubble-a,
+.chat-wrap .bubble-q {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.chat-wrap .bubble-a {
+  overflow-x: hidden;
+}
+
+/* Wide tables scroll sideways inside the box instead of spilling out. */
+.chat-wrap .table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 10px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat-wrap .table-scroll table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+
+.chat-wrap .table-scroll th,
+.chat-wrap .table-scroll td {
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.chat-wrap .table-scroll th {
+  white-space: nowrap;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+/* Code blocks and long unbroken strings */
+.chat-wrap .bubble-a pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.chat-wrap .bubble-a img {
+  max-width: 100%;
+  height: auto;
+}
