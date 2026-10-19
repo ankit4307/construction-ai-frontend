@@ -164,8 +164,7 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
                 </span>
                 {slowIds.includes(e.id) && (
                   <div style={{ marginTop: 8, fontSize: 12, opacity: 0.7 }}>
-                    The server may be waking up. This can take up to a minute on
-                    the first question.
+                    Still working on it. Large sheets can take 20 to 40 seconds.
                   </div>
                 )}
               </div>
