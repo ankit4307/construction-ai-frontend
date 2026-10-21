@@ -8,6 +8,7 @@ import {
   useState
 } from 'react';
 import { askQuestion } from '../api';
+import { wantsExcel, excelRequest, downloadExcel } from '../excelExport';
 import '../chat-fixes.css';
 
 const EXAMPLES = [
@@ -57,9 +58,55 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
     if (voice && !voice.speaking) setSpeakingId(null);
   }, [voice?.speaking]);
 
-  async function send(question) {
+  // "iska excel do": builds the file from the last answer already on screen.
+  // No server or AI call, so it is instant.
+  async function sendExcel(q) {
+    const id = Date.now();
+    const base = { id, question: q, time: timeNow(), status: 'done', kind: 'excel' };
+    const last = [...entries]
+      .reverse()
+      .find((e) => e.status === 'done' && e.kind !== 'excel');
+    setInput('');
+    if (!last) {
+      setEntries((prev) => [
+        ...prev,
+        {
+          ...base,
+          answer:
+            'There is no answer to export yet. Ask your question first, then type "give me the Excel file".'
+        }
+      ]);
+      return;
+    }
+    try {
+      const info = await downloadExcel(last.answer);
+      setEntries((prev) => [
+        ...prev,
+        {
+          ...base,
+          answer: `Your Excel file is ready and has been downloaded: **${info.name}**\n\nIt has the data from the answer to: "${last.question}" (${info.rows} rows).`
+        }
+      ]);
+    } catch (err) {
+      setEntries((prev) => [
+        ...prev,
+        { ...base, answer: `Could not create the Excel file: ${err.message}` }
+      ]);
+    }
+  }
+
+  async function send(question, exportAfter = false) {
     const q = (question ?? input).trim();
     if (!q || busy) return;
+    if (!exportAfter && wantsExcel(q)) {
+      const req = excelRequest(q);
+      if (req.fresh) {
+        // New question plus "in excel": answer it first, then download it.
+        return send(req.question, true);
+      }
+      sendExcel(q);
+      return;
+    }
 
     const id = Date.now();
     setEntries((prev) => [
@@ -76,13 +123,22 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
 
     try {
       const data = await askQuestion(token, q);
+      let shown = data.answer;
+      if (exportAfter) {
+        try {
+          const info = await downloadExcel(data.answer);
+          shown += `\n\nExcel file downloaded: **${info.name}**`;
+        } catch (err) {
+          shown += `\n\n(Could not create the Excel file: ${err.message})`;
+        }
+      }
       setEntries((prev) =>
         prev.map((e) =>
           e.id === id
             ? {
                 ...e,
                 status: 'done',
-                answer: data.answer,
+                answer: shown,
                 sheetsUsed: data.sheets_used || []
               }
             : e

@@ -1,0 +1,109 @@
+/* Light / Dark mode. Dark is the original look (styles.css + theme-polish.css).
+   Light is applied when <html data-theme="light"> is set (the default). */
+
+:root { color-scheme: dark; }
+:root[data-theme='light'] { color-scheme: light; }
+
+.theme-toggle {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s;
+}
+.theme-toggle:hover { border-color: var(--accent); background: rgba(128, 128, 128, 0.12); }
+
+/* ---------------- Light palette ---------------- */
+:root[data-theme='light'] {
+  --bg: #f3f4f7;
+  --bg-grid: #e8eaee;
+  --surface: #ffffff;
+  --surface-raised: #eef0f4;
+  --border: #d8dbe1;
+  --border-strong: #c2c6ce;
+  --text: #1c1f24;
+  --muted: #5b626c;
+  --accent: #ffb400;
+  --accent-dim: #d9b25a;
+  --line: #a86f00;
+  --good: #1e9a69;
+  --bad: #d3392d;
+
+  --pol-border: rgba(0, 0, 0, 0.1);
+  --pol-border-strong: rgba(0, 0, 0, 0.2);
+  --pol-shadow: 0 12px 32px rgba(20, 30, 50, 0.14);
+  --pol-shadow-sm: 0 3px 12px rgba(20, 30, 50, 0.08);
+  --pol-gold: #d9970a;
+  --pol-gold-soft: rgba(255, 180, 0, 0.2);
+}
+
+:root[data-theme='light'] * {
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+:root[data-theme='light'] *::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.22); }
+:root[data-theme='light'] *::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.4); }
+
+:root[data-theme='light'] .pol-btn:focus-visible { outline-color: #1c1f24; }
+:root[data-theme='light'] .pol-select { background: #fff; }
+:root[data-theme='light'] .pol-select:hover { background: #fafbfc; }
+:root[data-theme='light'] .pol-select option { background: #fff; color: #1c1f24; }
+:root[data-theme='light'] .pol-status { background: rgba(0, 0, 0, 0.035); }
+:root[data-theme='light'] .pol-status.is-error { color: #b3261e; background: rgba(211, 57, 45, 0.08); }
+:root[data-theme='light'] .pol-card { background: rgba(255, 255, 255, 0.95); }
+
+:root[data-theme='light'] .app-shell .topbar {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 16px rgba(20, 30, 50, 0.07);
+}
+:root[data-theme='light'] .app-shell .sidebar {
+  background: linear-gradient(180deg, #ffffff 0%, #f5f6f9 100%);
+  box-shadow: 6px 0 22px rgba(20, 30, 50, 0.07);
+}
+:root[data-theme='light'] .app-shell .sidebar button:hover { background: rgba(0, 0, 0, 0.05); }
+:root[data-theme='light'] .app-shell .title-block { background: rgba(0, 0, 0, 0.02); }
+
+:root[data-theme='light'] .chat-wrap .examples button { background: #fff; }
+:root[data-theme='light'] .chat-wrap .examples button:hover { background: rgba(255, 180, 0, 0.1); }
+:root[data-theme='light'] .chat-wrap .bubble-q { background: #e9eef6; }
+:root[data-theme='light'] .chat-wrap .bubble-a { background: #fff; }
+:root[data-theme='light'] .bubble-a.error { color: #b3261e; }
+
+/* Tables inside answers */
+:root[data-theme='light'] .chat-wrap .table-scroll { background: #fff; }
+:root[data-theme='light'] .chat-wrap .table-scroll th,
+:root[data-theme='light'] .chat-wrap .table-scroll td { border-bottom-color: rgba(0, 0, 0, 0.09); }
+:root[data-theme='light'] .chat-wrap .table-scroll th { border-bottom-color: rgba(0, 0, 0, 0.25); }
+:root[data-theme='light'] .chat-wrap .table-scroll thead th { background: #eef0f4; }
+:root[data-theme='light'] .chat-wrap .table-scroll tbody tr:nth-child(even) td { background: rgba(0, 0, 0, 0.025); }
+:root[data-theme='light'] .chat-wrap .table-scroll tbody tr:hover td { background: rgba(255, 180, 0, 0.14); }
+
+:root[data-theme='light'] .chat-wrap .listen-btn { background: rgba(0, 0, 0, 0.03); }
+:root[data-theme='light'] .chat-wrap .composer input[type='text'] { background: #fff; }
+:root[data-theme='light'] .chat-wrap .composer .send-btn:disabled {
+  color: rgba(0, 0, 0, 0.35);
+  background: #ece3c9;
+}
+:root[data-theme='light'] .sidebar-scrim.open { background: rgba(20, 30, 50, 0.35); }
+
+/* The Oasis logo has light-grey lettering, so in light mode it sits on a dark
+   panel (sidebar header and the connecting card) to stay readable. */
+:root[data-theme='light'] .app-shell .sidebar-top {
+  background: #24272d;
+  border-bottom: 1px solid var(--border);
+}
+:root[data-theme='light'] .app-shell .sidebar-top .brand-sub { color: #b9bdc4; }
+:root[data-theme='light'] .pol-card img {
+  background: #24272d;
+  padding: 12px 16px;
+  border-radius: 14px;
+  box-sizing: border-box;
+}

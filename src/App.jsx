@@ -5,8 +5,18 @@ import { useVoice } from './useVoice';
 import { connect, wakeServer } from './api';
 import logo from './assets/oasis-logo.png';
 import './theme-polish.css';
+import './theme-modes.css';
 
 const COMPANY_NAME = 'Oasis Projects Limited';
+
+// Light is the default; the choice is remembered in this browser.
+function loadTheme() {
+  try {
+    return localStorage.getItem('oasis-theme') === 'dark' ? 'dark' : 'light';
+  } catch (_) {
+    return 'light';
+  }
+}
 
 function todayStamp() {
   return new Date().toLocaleDateString('en-IN', {
@@ -24,6 +34,7 @@ export default function App() {
   const [slowConnect, setSlowConnect] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [voiceLang, setVoiceLang] = useState('hi-IN');
+  const [theme, setTheme] = useState(loadTheme);
   const chatRef = useRef(null);
 
   const voice = useVoice(voiceLang);
@@ -46,6 +57,15 @@ export default function App() {
       clearTimeout(slowTimer);
     }
   }
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem('oasis-theme', theme);
+    } catch (_) {
+      /* storage blocked: theme just won't be remembered */
+    }
+  }, [theme]);
 
   useEffect(() => {
     wakeServer(); // start waking the free server immediately
@@ -191,6 +211,15 @@ export default function App() {
           </button>
           <span className="topbar-title">Site chat</span>
           <div className="header-right">
+            <button
+              type="button"
+              className="theme-toggle"
+              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+              title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+              aria-label="Toggle light and dark mode"
+            >
+              {theme === 'light' ? '\uD83C\uDF19' : '\u2600\uFE0F'}
+            </button>
             {voice.supported && (
               <>
                 <select
