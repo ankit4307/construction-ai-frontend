@@ -45,6 +45,7 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
   const [slowIds, setSlowIds] = useState([]);
   const [autoSpeak, setAutoSpeak] = useState(false);
   const [speakingId, setSpeakingId] = useState(null);
+  const [excelDoneId, setExcelDoneId] = useState(null);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -161,6 +162,17 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
     }
   }
 
+  // Excel button under an answer: builds the file only when clicked.
+  async function handleExcelClick(entry) {
+    try {
+      await downloadExcel(entry.answer);
+      setExcelDoneId(entry.id);
+      setTimeout(() => setExcelDoneId(null), 3000);
+    } catch (err) {
+      window.alert(`Could not create the Excel file: ${err.message}`);
+    }
+  }
+
   function handleListen(entry) {
     if (!voice?.canSpeak) return;
     if (speakingId === entry.id && voice.speaking) {
@@ -243,8 +255,20 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
                   </div>
                 )}
 
-                {voice?.canSpeak && (
-                  <div>
+                <div className="answer-actions">
+                  {e.kind !== 'excel' && (
+                    <button
+                      type="button"
+                      onClick={() => handleExcelClick(e)}
+                      className="listen-btn"
+                      title="Download this answer as an Excel file"
+                    >
+                      {excelDoneId === e.id
+                        ? '\u2713 Downloaded'
+                        : '\u2B07 Excel'}
+                    </button>
+                  )}
+                  {voice?.canSpeak && (
                     <button
                       type="button"
                       onClick={() => handleListen(e)}
@@ -254,8 +278,8 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
                         ? '\u25a0 Stop'
                         : '\uD83D\uDD0A Listen'}
                     </button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             )}
 

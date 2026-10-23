@@ -107,3 +107,15 @@
   border-radius: 14px;
   box-sizing: border-box;
 }
+
+/* Buttons under an answer sit side by side. */
+.chat-wrap .answer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Keep table columns readable; the table scrolls sideways instead of
+   squeezing each cell into one word per line. */
+.chat-wrap .table-scroll th,
+.chat-wrap .table-scroll td { min-width: 110px; }
