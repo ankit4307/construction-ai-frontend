@@ -119,3 +119,10 @@
    squeezing each cell into one word per line. */
 .chat-wrap .table-scroll th,
 .chat-wrap .table-scroll td { min-width: 110px; }
+
+.chat-wrap .excel-ready-btn {
+  opacity: 1;
+  font-weight: 600;
+  border-color: var(--pol-gold);
+  background: var(--pol-gold-soft);
+}

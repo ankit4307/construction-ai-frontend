@@ -8,7 +8,13 @@ import {
   useState
 } from 'react';
 import { askQuestion } from '../api';
-import { wantsExcel, excelRequest, downloadExcel } from '../excelExport';
+import {
+  wantsExcel,
+  excelRequest,
+  buildExcel,
+  saveExcel,
+  downloadExcel
+} from '../excelExport';
 import '../chat-fixes.css';
 
 const EXAMPLES = [
@@ -80,12 +86,13 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
       return;
     }
     try {
-      const info = await downloadExcel(last.answer);
+      const file = await buildExcel(last.answer);
       setEntries((prev) => [
         ...prev,
         {
           ...base,
-          answer: `Your Excel file is ready and has been downloaded: **${info.name}**\n\nIt has the data from the answer to: "${last.question}" (${info.rows} rows).`
+          excel: file,
+          answer: `Your Excel file is ready: **${file.name}**\n\nIt has the data from the answer to: "${last.question}" (${file.rows} rows). Press the button to download it.`
         }
       ]);
     } catch (err) {
@@ -125,10 +132,10 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
     try {
       const data = await askQuestion(token, q);
       let shown = data.answer;
+      let excelFile = null;
       if (exportAfter) {
         try {
-          const info = await downloadExcel(data.answer);
-          shown += `\n\nExcel file downloaded: **${info.name}**`;
+          excelFile = await buildExcel(data.answer);
         } catch (err) {
           shown += `\n\n(Could not create the Excel file: ${err.message})`;
         }
@@ -140,6 +147,7 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
                 ...e,
                 status: 'done',
                 answer: shown,
+                excel: excelFile,
                 sheetsUsed: data.sheets_used || []
               }
             : e
@@ -256,7 +264,16 @@ const Chat = forwardRef(function Chat({ token, voice }, ref) {
                 )}
 
                 <div className="answer-actions">
-                  {e.kind !== 'excel' && (
+                  {e.excel && (
+                    <button
+                      type="button"
+                      onClick={() => saveExcel(e.excel)}
+                      className="listen-btn excel-ready-btn"
+                    >
+                      {'\u2B07 Download Excel'}
+                    </button>
+                  )}
+                  {e.kind !== 'excel' && !e.excel && (
                     <button
                       type="button"
                       onClick={() => handleExcelClick(e)}
